@@ -456,13 +456,35 @@ document.getElementById("copy").onclick=async()=>{
 document.getElementById("reset").onclick=()=>{st.name=""; applyClass("Custom"); render()};
 
 const KEY="ac-builds";
-async function readList(){try{const r=await window.storage.get(KEY); return r?JSON.parse(r.value):[]}catch(e){return []}}
+const store=(()=>{
+  if(window.storage&&typeof window.storage.get==="function")return{
+    kind:"host",
+    async read(){try{const r=await window.storage.get(KEY); return r?JSON.parse(r.value):[]}catch(e){return []}},
+    async write(l){await window.storage.set(KEY,JSON.stringify(l))}
+  };
+  try{
+    const probe="__ac_probe";
+    localStorage.setItem(probe,"1"); localStorage.removeItem(probe);
+    return{
+      kind:"local",
+      async read(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch(e){return []}},
+      async write(l){localStorage.setItem(KEY,JSON.stringify(l))}
+    };
+  }catch(e){}
+  let mem=[];
+  return{kind:"memory",async read(){return mem},async write(l){mem=l}};
+})();
+
 async function loadSaves(){
   const box=document.getElementById("saves");
-  if(!window.storage){box.textContent=""; return}
-  const list=await readList();
+  const list=await store.read();
   box.innerHTML="";
-  if(!list.length){box.textContent="No saved builds yet."; return}
+  if(!list.length){
+    box.textContent=store.kind==="memory"
+      ?"Saving isn't available in this browser, so builds last only until you reload."
+      :"No saved builds yet.";
+    return;
+  }
   box.appendChild(document.createTextNode("Saved: "));
   list.forEach((b,i)=>{
     const t=document.createElement("button");
@@ -471,16 +493,18 @@ async function loadSaves(){
     box.appendChild(t);
     const x=document.createElement("button");
     x.textContent="remove"; x.style.opacity=".7";
-    x.onclick=async()=>{const l=await readList(); l.splice(i,1); try{await window.storage.set(KEY,JSON.stringify(l))}catch(e){} loadSaves()};
+    x.setAttribute("aria-label","Remove "+(b.name||"unnamed")+" build");
+    x.onclick=async()=>{const l=await store.read(); l.splice(i,1); try{await store.write(l)}catch(e){} loadSaves()};
     box.appendChild(x);
   });
+  if(store.kind==="memory")box.appendChild(document.createTextNode(" (this session only)"));
 }
 document.getElementById("save").onclick=async()=>{
-  if(!window.storage){flash("save","Saving unavailable"); return}
-  let list=await readList();
+  let list=await store.read();
   list.unshift(JSON.parse(JSON.stringify(st)));
   list=list.slice(0,8);
-  try{await window.storage.set(KEY,JSON.stringify(list)); flash("save","Saved")}catch(e){flash("save","Save failed")}
+  try{await store.write(list); flash("save",store.kind==="memory"?"Saved for now":"Saved")}
+  catch(e){flash("save","Save failed")}
   loadSaves();
 };
 

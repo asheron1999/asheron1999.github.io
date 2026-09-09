@@ -1,0 +1,494 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dereth character builder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Barlow+Semi+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#131a2b; --ink2:#1b2437; --ink3:#232e45;
+    --vellum:#e9e3d4; --vellum-dim:#a9a394;
+    --portal:#57aecb; --portal-dim:#2c6f88;
+    --bronze:#b58a4b; --bronze-dim:#6b5228;
+    --blood:#b04a42;
+    --serif:"EB Garamond",Georgia,serif;
+    --sans:"Barlow Semi Condensed","Helvetica Neue",Arial,sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; background:var(--ink); color:var(--vellum);
+    font-family:var(--serif); font-size:17px; line-height:1.6;
+    -webkit-text-size-adjust:100%;
+  }
+  .wrap{max-width:760px; margin:0 auto; padding:0 18px 72px}
+  h1{font-size:31px; font-weight:500; letter-spacing:.01em; margin:26px 0 2px; line-height:1.15}
+  h2{font-size:21px; font-weight:500; margin:0 0 4px}
+  .lede{color:var(--vellum-dim); margin:0 0 26px; font-style:italic}
+  section{border-top:1px solid var(--ink3); padding:22px 0 4px; margin-top:8px}
+  .hint{color:var(--vellum-dim); font-size:15px; margin:2px 0 16px}
+  .sans{font-family:var(--sans)}
+
+  .reservoir{
+    position:sticky; top:0; z-index:20; background:var(--ink);
+    padding:10px 0 12px; border-bottom:1px solid var(--ink3);
+  }
+  .pool{display:flex; align-items:baseline; gap:8px; font-family:var(--sans); font-size:15px; color:var(--vellum-dim)}
+  .pool b{font-size:22px; font-weight:600; color:var(--vellum); font-variant-numeric:tabular-nums}
+  .pool + .pool{margin-top:8px}
+  .track{height:7px; background:var(--ink3); margin-top:5px; overflow:hidden}
+  .fill{height:100%; width:0%; background:var(--bronze); transition:width .18s ease}
+  .fill.skills{background:var(--portal-dim)}
+  .over b{color:var(--blood)}
+  .over .fill{background:var(--blood)}
+
+  .grid{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .pick{
+    text-align:left; font:inherit; color:var(--vellum); cursor:pointer;
+    background:var(--ink2); border:1px solid var(--ink3); border-radius:2px;
+    padding:11px 13px;
+  }
+  .pick:hover{border-color:var(--bronze-dim)}
+  .pick[aria-pressed="true"]{border-color:var(--bronze); background:var(--ink3); box-shadow:inset 3px 0 0 var(--bronze)}
+  .pick .nm{display:block; font-size:18px}
+  .pick .sub{display:block; font-family:var(--sans); font-size:13.5px; color:var(--vellum-dim); line-height:1.35; margin-top:3px}
+  .pick:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--portal); outline-offset:2px}
+
+  .attr{display:grid; grid-template-columns:1fr auto; gap:2px 10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--ink3)}
+  .attr .nm{font-size:18px}
+  .attr .why{grid-column:1/2; font-family:var(--sans); font-size:13px; color:var(--vellum-dim); line-height:1.3}
+  .attr .val{font-family:var(--sans); font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; grid-row:1/3; text-align:right; min-width:2.4em}
+  .attr .row{grid-column:1/3; display:flex; align-items:center; gap:10px; margin-top:8px}
+  input[type=range]{flex:1; accent-color:var(--bronze); height:22px; min-width:0}
+  .step{
+    font-family:var(--sans); font-size:17px; font-weight:600; color:var(--vellum);
+    background:var(--ink2); border:1px solid var(--ink3); border-radius:2px;
+    width:38px; height:34px; cursor:pointer; flex:none;
+  }
+  .step:hover:not(:disabled){border-color:var(--bronze)}
+  .step:disabled{opacity:.35; cursor:default}
+
+  .derived{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:16px 0 4px}
+  .derived div{background:var(--ink2); padding:11px 12px}
+  .derived span{display:block; font-family:var(--sans); font-size:13px; color:var(--vellum-dim)}
+  .derived b{font-family:var(--sans); font-size:23px; font-weight:600; font-variant-numeric:tabular-nums}
+
+  .skgroup{margin-top:18px}
+  .skgroup h3{font-size:15px; font-weight:500; font-family:var(--sans); letter-spacing:.06em; color:var(--bronze); margin:0 0 4px; border-bottom:1px solid var(--ink3); padding-bottom:4px}
+  .sk{display:grid; grid-template-columns:1fr auto auto; gap:0 8px; align-items:center; padding:7px 0; border-bottom:1px solid #1f2939}
+  .sk .nm{font-size:17px; line-height:1.25}
+  .sk .meta{grid-column:1/2; font-family:var(--sans); font-size:12.5px; color:var(--vellum-dim); line-height:1.3}
+  .sk .base{font-family:var(--sans); font-size:20px; font-weight:600; font-variant-numeric:tabular-nums; grid-row:1/3; text-align:right; min-width:2.2em}
+  .sk .ctl{grid-row:1/3; display:flex; gap:5px}
+  .sk .ctl .step{width:32px; height:31px; font-size:15px}
+  .sk.st-trained{background:linear-gradient(to right,rgba(181,138,75,.09),transparent 60%)}
+  .sk.st-specialized{background:linear-gradient(to right,rgba(87,174,203,.14),transparent 60%)}
+  .chip{font-family:var(--sans); font-size:12px; letter-spacing:.04em; padding:1px 6px; border:1px solid var(--ink3); color:var(--vellum-dim)}
+  .chip.t{color:var(--bronze); border-color:var(--bronze-dim)}
+  .chip.s{color:var(--portal); border-color:var(--portal-dim)}
+  .chip.lock{color:var(--vellum-dim)}
+
+  .summary{background:var(--ink2); padding:16px 16px 18px; margin-top:14px}
+  .summary pre{font-family:var(--sans); font-size:14.5px; line-height:1.55; white-space:pre-wrap; margin:0; color:var(--vellum)}
+  .bar{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
+  .btn{font-family:var(--sans); font-size:15px; color:var(--vellum); background:transparent; border:1px solid var(--bronze-dim); border-radius:2px; padding:8px 14px; cursor:pointer}
+  .btn:hover{border-color:var(--bronze); background:var(--ink2)}
+  .btn.warn{border-color:#4a2a28; color:#d09a95}
+  .name{display:flex; gap:8px; align-items:center; margin:14px 0 2px; flex-wrap:wrap}
+  .name input{font-family:var(--serif); font-size:18px; color:var(--vellum); background:var(--ink2); border:1px solid var(--ink3); border-radius:2px; padding:8px 11px; flex:1; min-width:160px}
+  .flag{font-family:var(--sans); font-size:14px; color:var(--portal); margin:10px 0 0}
+  .flag.bad{color:var(--blood)}
+  footer{border-top:1px solid var(--ink3); margin-top:30px; padding-top:16px; color:var(--vellum-dim); font-size:15px}
+  .saves{font-family:var(--sans); font-size:14px; color:var(--vellum-dim); margin-top:10px}
+  .saves button{font-family:var(--sans); font-size:14px; background:transparent; border:none; border-bottom:1px dotted var(--portal-dim); color:var(--portal); cursor:pointer; padding:0 0 1px; margin-right:12px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <h1>Dereth character builder</h1>
+  <p class="lede">Heritage, profession, attributes, skills — planned before you ever reach the Lifestone.</p>
+
+  <div class="reservoir">
+    <div class="pool" id="apool">
+      <span>Attribute credits</span><b id="acred">330</b><span>of 330 remaining</span>
+    </div>
+    <div class="track"><div class="fill" id="afill"></div></div>
+    <div class="pool" id="spool">
+      <span>Training credits</span><b id="scred">0</b><span>of 50 remaining</span>
+    </div>
+    <div class="track"><div class="fill skills" id="sfill"></div></div>
+  </div>
+
+  <section>
+    <h2>Heritage</h2>
+    <p class="hint">Your people set the skills you are trained in for free. Those cannot be lowered.</p>
+    <div class="grid" id="heritages"></div>
+    <div class="name">
+      <input id="charname" placeholder="Character name" aria-label="Character name">
+      <button class="btn" id="rollname">Roll a name</button>
+    </div>
+  </section>
+
+  <section>
+    <h2>Profession</h2>
+    <p class="hint">A profession presets your attributes and skills. Custom gives you all 330 credits and 50 training credits to spend yourself.</p>
+    <div class="grid" id="professions"></div>
+    <p class="flag" id="drift"></p>
+  </section>
+
+  <section>
+    <h2>Attributes</h2>
+    <p class="hint">Each attribute starts at 10 and tops out at 100. Health and Stamina follow Endurance; Mana follows Self.</p>
+    <div id="attrs"></div>
+    <div class="derived">
+      <div><span>Health</span><b id="dHealth">5</b></div>
+      <div><span>Stamina</span><b id="dStam">10</b></div>
+      <div><span>Mana</span><b id="dMana">10</b></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Skills</h2>
+    <p class="hint">Tap + to raise a skill from untrained to trained, then to specialized. Specialized can only be bought now, during creation — never later.</p>
+    <div id="skills"></div>
+  </section>
+
+  <section>
+    <h2>Your character</h2>
+    <div class="summary"><pre id="sheet"></pre></div>
+    <div class="bar">
+      <button class="btn" id="copy">Copy sheet</button>
+      <button class="btn" id="save">Save build</button>
+      <button class="btn warn" id="reset">Start over</button>
+    </div>
+    <div class="saves" id="saves"></div>
+  </section>
+
+  <footer>
+    Heritage training, profession templates, attribute range, and the four skill classes come from the manual. The manual prints only one skill formula (Alchemy = [Coordination + Focus] ÷ 3), so every other base value here uses that same pattern with the governing attributes the manual names, and credit costs are a reasonable house scale rather than the live game's table.
+  </footer>
+</div>
+
+<script>
+const ATTRS=[
+  {k:"Strength",why:"Melee damage and carrying capacity"},
+  {k:"Endurance",why:"Health, Stamina, damage you can absorb"},
+  {k:"Coordination",why:"Missile accuracy, trade skills, lockpicking"},
+  {k:"Quickness",why:"Attack speed and evasion"},
+  {k:"Focus",why:"Spellcasting, appraisal, healing kits"},
+  {k:"Self",why:"Mana, willpower, Leadership and Loyalty"}
+];
+const S=1,E=2,C=3,Q=4,F=5,SF=6;
+const AK=["Strength","Endurance","Coordination","Quickness","Focus","Self"];
+const SKILLS=[
+  ["Axe","Weapons",["Strength","Coordination"],3,4,8],
+  ["Dagger","Weapons",["Strength","Coordination"],3,4,8],
+  ["Mace","Weapons",["Strength","Coordination"],3,4,8],
+  ["Spear","Weapons",["Strength","Coordination"],3,4,8],
+  ["Staff","Weapons",["Strength","Coordination"],3,4,8],
+  ["Sword","Weapons",["Strength","Coordination"],3,4,8],
+  ["Unarmed Combat","Weapons",["Strength","Coordination"],3,4,8],
+  ["Bow","Weapons",["Coordination"],2,4,8],
+  ["Crossbow","Weapons",["Coordination"],2,4,8],
+  ["Thrown Weapons","Weapons",["Coordination"],2,4,8],
+  ["Melee Defense","Defense",["Coordination","Quickness"],3,4,8],
+  ["Missile Defense","Defense",["Coordination","Quickness"],3,4,8],
+  ["Magic Defense","Defense",["Focus","Self"],3,4,8],
+  ["Creature Enchantment","Magic",["Focus","Self"],3,8,12,1],
+  ["Item Enchantment","Magic",["Focus","Self"],3,8,12,1],
+  ["Life Magic","Magic",["Focus","Self"],3,8,12,1],
+  ["War Magic","Magic",["Focus","Self"],3,8,12,1],
+  ["Arcane Lore","Magic",["Focus","Self"],3,2,4],
+  ["Mana Conversion","Magic",["Focus","Self"],3,4,6],
+  ["Appraise Armor","Lore",["Focus"],2,2,4],
+  ["Appraise Item","Lore",["Focus"],2,2,4],
+  ["Appraise Weapon","Lore",["Focus"],2,2,4],
+  ["Appraise Magic Item","Lore",["Focus","Self"],3,4,6],
+  ["Assess Creature","Lore",["Focus"],2,2,4],
+  ["Assess Person","Lore",["Focus"],2,2,4],
+  ["Alchemy","Trade",["Coordination","Focus"],3,4,6],
+  ["Cooking","Trade",["Coordination","Focus"],3,2,4],
+  ["Fletching","Trade",["Coordination","Focus"],3,4,6],
+  ["Deception","Knack",["Focus","Self"],3,4,6],
+  ["Healing","Knack",["Coordination","Focus"],3,4,6],
+  ["Jump","Knack",["Strength","Coordination"],3,2,4],
+  ["Lockpick","Knack",["Coordination","Focus"],3,4,6],
+  ["Run","Knack",["Quickness"],2,2,4],
+  ["Leadership","Knack",["Self"],2,2,4],
+  ["Loyalty","Knack",["Self"],2,2,4]
+].map(r=>({name:r[0],group:r[1],attrs:r[2],div:r[3],train:r[4],spec:r[5],unusable:!!r[6]}));
+const GROUPS=["Weapons","Defense","Magic","Lore","Trade","Knack"];
+const GROUPLABEL={Weapons:"Weapons",Defense:"Defense",Magic:"Magic",Lore:"Appraisal and lore",Trade:"Trade skills",Knack:"Body and wit"};
+
+const HERITAGE={
+  Aluvian:{blurb:"Warlike but loyal, northeast Osteth. Code of Pwyll.",trained:["Assess Person","Dagger"],
+    names:["Brethym","Cyndal Farson","Ostan the Quick","Seltor","Trothard Litson","Wodrith the Bear","Girdulla","Adelia Brathmad","Ceranne the Golden","Feristal","Megurtha Dermad","Lanida the True"]},
+  "Gharu'ndim":{blurb:"Desert traders who prize a sharp mind. Central and western Osteth.",trained:["Appraise Item","Staff"],
+    names:["Isufris","Akkah al-Munib","Hanril ibn Tadwas","Jamraj","Qumud al-Riyf","Zur ibn Atri","Biyafah","Yahida al-Qa'nif","Fathna bint Baljid","Nayiza","Mara al-Luq","Djusala bint Sida"]},
+  Sho:{blurb:"Disciplined and reserved; unarmed combat as art. Southeastern Osteth.",trained:["Unarmed Combat"],
+    names:["Jhong Mi","Hei Shikken","Kou-long Shui","Lun Zen","Ryucho Xao","Eng Lun-ji","Zai Nozhen","Den Lu-ki","Guroku Soben","Ka-yen Ha","Chun Yao","Ai Rashoku"]}
+};
+
+const PROFS={
+  Custom:{blurb:"All attributes at 10, 50 training credits, no preset skills. Known as an adventurer.",
+    attrs:[10,10,10,10,10,10],spec:[],trained:[],credits:50,kit:"Nothing preset"},
+  Archer:{blurb:"Bows, weighted to Coordination and Quickness.",
+    attrs:[40,60,90,90,60,50],spec:["Bow","Missile Defense","Fletching"],
+    trained:["Appraise Weapon","Assess Person","Jump","Magic Defense","Run","Spear"],credits:0,
+    kit:"Practice bow, arrows, spear"},
+  Blademaster:{blurb:"Swords and knives. Strength, Coordination, Quickness.",
+    attrs:[85,70,80,80,40,35],spec:["Melee Defense","Sword"],
+    trained:["Appraise Weapon","Dagger","Jump","Magic Defense","Run","Thrown Weapons"],credits:0,
+    kit:"Practice sword, throwing weapons, knife"},
+  Enchanter:{blurb:"Spells that alter creatures and items. Focus and Self.",
+    attrs:[35,60,50,45,100,100],spec:["Appraise Magic Item","Creature Enchantment","Item Enchantment"],
+    trained:["Arcane Lore","Jump","Magic Defense","Mana Conversion","Run"],credits:0,
+    kit:"Wand, 3 item + 3 creature spells, components"},
+  "Life Mage":{blurb:"Healing and protection. Coordination, Focus, Self.",
+    attrs:[30,60,70,45,95,90],spec:["Life Magic"],
+    trained:["Alchemy","Arcane Lore","Assess Person","Healing","Jump","Magic Defense","Mana Conversion","Run"],credits:0,
+    kit:"Two healing kits, wand, 3 Life spells, components"},
+  Sorcerer:{blurb:"Combat magic and mana. Focus and Self.",
+    attrs:[30,60,50,50,100,100],spec:["Arcane Lore","Mana Conversion","War Magic"],
+    trained:["Appraise Magic Item","Jump","Magic Defense","Run"],credits:0,
+    kit:"Wand, 3 War Magic spells, components"},
+  Vagabond:{blurb:"Locks, appraisal, deception. Coordination, Quickness, Focus.",
+    attrs:[45,55,90,85,85,30],spec:["Appraise Item","Appraise Magic Item","Deception","Lockpick"],
+    trained:["Cooking","Dagger","Jump","Magic Defense","Missile Defense","Run","Thrown Weapons"],credits:0,
+    kit:"Practice dagger, practice lockpicks"},
+  Warrior:{blurb:"Every weapon, no specialization. Strength, Endurance, Coordination.",
+    attrs:[90,90,85,65,35,25],spec:[],
+    trained:["Appraise Armor","Appraise Weapon","Assess Creature","Axe","Crossbow","Jump","Magic Defense","Melee Defense","Missile Defense","Run","Sword"],credits:0,
+    kit:"Practice sword, crossbow, 30 quarrels, axe"}
+};
+
+const ATTR_POOL=330, BASE=10, CAP=100;
+let st={heritage:"Aluvian",prof:"Custom",name:"",attrs:[10,10,10,10,10,10],skills:{},credits:50};
+
+function heritageTrained(){return HERITAGE[st.heritage].trained}
+function statusOf(n){return st.skills[n]||"untrained"}
+function skill(n){return SKILLS.find(s=>s.name===n)}
+function locked(n){return heritageTrained().includes(n)}
+
+function applyProf(p){
+  const t=PROFS[p];
+  st.prof=p; st.attrs=t.attrs.slice(); st.skills={}; st.credits=t.credits;
+  t.trained.forEach(n=>{if(skill(n))st.skills[n]="trained"});
+  t.spec.forEach(n=>{if(skill(n))st.skills[n]="specialized"});
+  heritageTrained().forEach(n=>{if(statusOf(n)==="untrained")st.skills[n]="trained"});
+}
+
+function spentAttr(){return st.attrs.reduce((a,v)=>a+(v-BASE),0)}
+function professionLabel(){
+  if(st.prof==="Custom")return "Adventurer";
+  const t=PROFS[st.prof];
+  const want=new Set([...t.trained,...t.spec].filter(skill));
+  for(const s of SKILLS){
+    const cur=statusOf(s.name);
+    const exp=t.spec.includes(s.name)?"specialized":(t.trained.includes(s.name)||locked(s.name)?"trained":"untrained");
+    if(cur!==exp)return "Adventurer";
+  }
+  if(t.attrs.some((v,i)=>v!==st.attrs[i]))return st.prof;
+  return st.prof;
+}
+function driftedSkills(){
+  if(st.prof==="Custom")return false;
+  const t=PROFS[st.prof];
+  return SKILLS.some(s=>{
+    const exp=t.spec.includes(s.name)?"specialized":(t.trained.includes(s.name)||locked(s.name)?"trained":"untrained");
+    return statusOf(s.name)!==exp;
+  });
+}
+
+function baseSkill(s){
+  const sum=s.attrs.reduce((a,k)=>a+st.attrs[AK.indexOf(k)],0);
+  return Math.floor(sum/s.div);
+}
+
+function el(t,c,x){const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e}
+
+function buildPickers(){
+  const h=document.getElementById("heritages"); h.innerHTML="";
+  Object.keys(HERITAGE).forEach(k=>{
+    const b=el("button","pick"); b.type="button";
+    b.appendChild(el("span","nm",k));
+    b.appendChild(el("span","sub",HERITAGE[k].blurb));
+    b.appendChild(el("span","sub","Free training: "+HERITAGE[k].trained.join(", ")));
+    b.onclick=()=>{st.heritage=k; applyProf(st.prof); render()};
+    h.appendChild(b);
+  });
+  const p=document.getElementById("professions"); p.innerHTML="";
+  Object.keys(PROFS).forEach(k=>{
+    const b=el("button","pick"); b.type="button";
+    b.appendChild(el("span","nm",k==="Custom"?"Custom character":k));
+    b.appendChild(el("span","sub",PROFS[k].blurb));
+    b.appendChild(el("span","sub","Starts with: "+PROFS[k].kit));
+    b.onclick=()=>{applyProf(k); render()};
+    p.appendChild(b);
+  });
+}
+
+function buildAttrs(){
+  const box=document.getElementById("attrs"); box.innerHTML="";
+  ATTRS.forEach((a,i)=>{
+    const d=el("div","attr");
+    d.appendChild(el("div","nm",a.k));
+    const v=el("div","val",String(st.attrs[i])); d.appendChild(v);
+    d.appendChild(el("div","why",a.why));
+    const row=el("div","row");
+    const minus=el("button","step","−"); minus.type="button"; minus.setAttribute("aria-label","Lower "+a.k);
+    const plus=el("button","step","+"); plus.type="button"; plus.setAttribute("aria-label","Raise "+a.k);
+    const r=document.createElement("input");
+    r.type="range"; r.min=BASE; r.max=CAP; r.step=1; r.value=st.attrs[i];
+    r.setAttribute("aria-label",a.k);
+    const set=n=>{
+      n=Math.max(BASE,Math.min(CAP,n));
+      const other=spentAttr()-(st.attrs[i]-BASE);
+      if(other+(n-BASE)>ATTR_POOL)n=BASE+(ATTR_POOL-other);
+      st.attrs[i]=n; render();
+    };
+    minus.onclick=()=>set(st.attrs[i]-1);
+    plus.onclick=()=>set(st.attrs[i]+1);
+    r.oninput=e=>set(parseInt(e.target.value,10));
+    minus.disabled=st.attrs[i]<=BASE;
+    plus.disabled=spentAttr()>=ATTR_POOL||st.attrs[i]>=CAP;
+    row.append(minus,r,plus);
+    d.appendChild(row);
+    box.appendChild(d);
+  });
+  document.getElementById("dHealth").textContent=Math.floor(st.attrs[1]/2);
+  document.getElementById("dStam").textContent=st.attrs[1];
+  document.getElementById("dMana").textContent=st.attrs[5];
+}
+
+function raise(n){
+  const s=skill(n), cur=statusOf(n);
+  if(cur==="specialized")return;
+  const cost=cur==="untrained"?s.train:s.spec-s.train;
+  if(cost>st.credits)return;
+  st.credits-=cost; st.skills[n]=cur==="untrained"?"trained":"specialized"; render();
+}
+function lower(n){
+  const s=skill(n), cur=statusOf(n);
+  if(cur==="untrained")return;
+  if(cur==="trained"&&locked(n))return;
+  const refund=cur==="specialized"?s.spec-s.train:s.train;
+  st.credits+=refund; st.skills[n]=cur==="specialized"?"trained":"untrained"; render();
+}
+
+function buildSkills(){
+  const box=document.getElementById("skills"); box.innerHTML="";
+  GROUPS.forEach(g=>{
+    const wrap=el("div","skgroup");
+    wrap.appendChild(el("h3",null,GROUPLABEL[g]));
+    SKILLS.filter(s=>s.group===g).forEach(s=>{
+      const stt=statusOf(s.name);
+      const d=el("div","sk st-"+stt);
+      const nm=el("div","nm",s.name); d.appendChild(nm);
+      const usable=!(s.unusable&&stt==="untrained");
+      const b=el("div","base",usable?String(baseSkill(s)):"—"); d.appendChild(b);
+      const ctl=el("div","ctl");
+      const minus=el("button","step","−"); minus.type="button"; minus.setAttribute("aria-label","Lower "+s.name);
+      const plus=el("button","step","+"); plus.type="button"; plus.setAttribute("aria-label","Raise "+s.name);
+      minus.onclick=()=>lower(s.name); plus.onclick=()=>raise(s.name);
+      minus.disabled=stt==="untrained"||(stt==="trained"&&locked(s.name));
+      const nextCost=stt==="untrained"?s.train:(stt==="trained"?s.spec-s.train:0);
+      plus.disabled=stt==="specialized"||nextCost>st.credits;
+      ctl.append(minus,plus); d.appendChild(ctl);
+      const meta=el("div","meta");
+      const chip=el("span","chip"+(stt==="trained"?" t":stt==="specialized"?" s":""),
+        locked(s.name)&&stt==="trained"?"trained by heritage":stt);
+      meta.appendChild(chip);
+      const bits=[" ",s.attrs.join(" + ")+" ÷ "+s.div];
+      if(stt!=="specialized")bits.push("next: "+nextCost+" cr");
+      if(s.unusable&&stt==="untrained")bits.push("unusable until trained");
+      meta.appendChild(document.createTextNode("  "+bits.join("  ·  ")));
+      d.appendChild(meta);
+      wrap.appendChild(d);
+    });
+    box.appendChild(wrap);
+  });
+}
+
+function buildSheet(){
+  const spec=SKILLS.filter(s=>statusOf(s.name)==="specialized").map(s=>s.name+" "+baseSkill(s));
+  const tr=SKILLS.filter(s=>statusOf(s.name)==="trained").map(s=>s.name+" "+baseSkill(s));
+  const L=[];
+  L.push((st.name||"Unnamed")+" — "+st.heritage+" "+professionLabel().toLowerCase());
+  L.push("");
+  L.push(AK.map((k,i)=>k.slice(0,4)+" "+st.attrs[i]).join("   "));
+  L.push("Health "+Math.floor(st.attrs[1]/2)+"   Stamina "+st.attrs[1]+"   Mana "+st.attrs[5]);
+  L.push("");
+  L.push("Specialized: "+(spec.length?spec.join(", "):"none"));
+  L.push("Trained: "+(tr.length?tr.join(", "):"none"));
+  L.push("");
+  L.push("Unspent: "+(ATTR_POOL-spentAttr())+" attribute credits, "+st.credits+" training credits");
+  if(st.prof!=="Custom")L.push("Starting kit: "+PROFS[st.prof].kit);
+  document.getElementById("sheet").textContent=L.join("\n");
+}
+
+function render(){
+  const left=ATTR_POOL-spentAttr();
+  document.getElementById("acred").textContent=left;
+  document.getElementById("afill").style.width=(spentAttr()/ATTR_POOL*100)+"%";
+  document.getElementById("scred").textContent=st.credits;
+  const capS=Math.max(50,st.credits);
+  document.getElementById("sfill").style.width=((capS-st.credits)/capS*100)+"%";
+  document.getElementById("charname").value=st.name;
+
+  document.querySelectorAll("#heritages .pick").forEach((b,i)=>
+    b.setAttribute("aria-pressed",String(Object.keys(HERITAGE)[i]===st.heritage)));
+  document.querySelectorAll("#professions .pick").forEach((b,i)=>
+    b.setAttribute("aria-pressed",String(Object.keys(PROFS)[i]===st.prof)));
+
+  const df=document.getElementById("drift");
+  if(st.prof==="Custom"){df.className="flag"; df.textContent="Custom characters are known as adventurers."}
+  else if(driftedSkills()){df.className="flag bad"; df.textContent="Skills now differ from the "+st.prof.toLowerCase()+" template — this character will be known as an adventurer."}
+  else{df.className="flag"; df.textContent=st.prof+" template intact."}
+
+  buildAttrs(); buildSkills(); buildSheet();
+}
+
+document.getElementById("charname").oninput=e=>{st.name=e.target.value; buildSheet()};
+document.getElementById("rollname").onclick=()=>{
+  const n=HERITAGE[st.heritage].names;
+  st.name=n[Math.floor(Math.random()*n.length)];
+  document.getElementById("charname").value=st.name; buildSheet();
+};
+document.getElementById("copy").onclick=async()=>{
+  const t=document.getElementById("sheet").textContent;
+  try{await navigator.clipboard.writeText(t); flash("copy","Copied")}catch(e){flash("copy","Select and copy above")}
+};
+document.getElementById("reset").onclick=()=>{st.name="";applyProf("Custom");render()};
+function flash(id,msg){const b=document.getElementById(id),o=b.textContent;b.textContent=msg;setTimeout(()=>b.textContent=o,1400)}
+
+const KEY="ac-builds";
+async function loadSaves(){
+  const box=document.getElementById("saves");
+  if(!window.storage){box.textContent="";return}
+  let list=[];
+  try{const r=await window.storage.get(KEY); list=r?JSON.parse(r.value):[]}catch(e){list=[]}
+  box.innerHTML="";
+  if(!list.length){box.textContent="No saved builds yet.";return}
+  box.appendChild(document.createTextNode("Saved: "));
+  list.forEach((b,i)=>{
+    const t=document.createElement("button");
+    t.textContent=(b.name||"Unnamed")+" ("+b.heritage+" "+b.prof.toLowerCase()+")";
+    t.onclick=()=>{st=JSON.parse(JSON.stringify(b)); render()};
+    box.appendChild(t);
+    const x=document.createElement("button");
+    x.textContent="remove"; x.style.opacity=".7";
+    x.onclick=async()=>{list.splice(i,1); try{await window.storage.set(KEY,JSON.stringify(list))}catch(e){} loadSaves()};
+    box.appendChild(x);
+  });
+}
+document.getElementById("save").onclick=async()=>{
+  if(!window.storage){flash("save","Saving unavailable");return}
+  let list=[];
+  try{const r=await window.storage.get(KEY); list=r?JSON.parse(r.value):[]}catch(e){list=[]}
+  list.unshift(JSON.parse(JSON.stringify(st))); list=list.slice(0,8);
+  try{await window.storage.set(KEY,JSON.stringify(list)); flash("save","Saved")}catch(e){flash("save","Save failed")}
+  loadSaves();
+};
+
+buildPickers(); applyProf("Custom"); render(); loadSaves();
+</script>

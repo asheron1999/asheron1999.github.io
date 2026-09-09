@@ -15,63 +15,40 @@
     --sans:"Barlow Semi Condensed","Helvetica Neue",Arial,sans-serif;
   }
   *{box-sizing:border-box}
-  body{
-    margin:0; background:var(--ink); color:var(--vellum);
-    font-family:var(--serif); font-size:17px; line-height:1.6;
-    -webkit-text-size-adjust:100%;
-  }
+  body{margin:0; background:var(--ink); color:var(--vellum); font-family:var(--serif); font-size:17px; line-height:1.6; -webkit-text-size-adjust:100%}
   .wrap{max-width:760px; margin:0 auto; padding:0 18px 72px}
-  h1{font-size:31px; font-weight:500; letter-spacing:.01em; margin:26px 0 2px; line-height:1.15}
+  h1{font-size:31px; font-weight:500; margin:26px 0 2px; line-height:1.15}
   h2{font-size:21px; font-weight:500; margin:0 0 4px}
   .lede{color:var(--vellum-dim); margin:0 0 26px; font-style:italic}
   section{border-top:1px solid var(--ink3); padding:22px 0 4px; margin-top:8px}
   .hint{color:var(--vellum-dim); font-size:15px; margin:2px 0 16px}
-  .sans{font-family:var(--sans)}
-
-  .reservoir{
-    position:sticky; top:0; z-index:20; background:var(--ink);
-    padding:10px 0 12px; border-bottom:1px solid var(--ink3);
-  }
-  .pool{display:flex; align-items:baseline; gap:8px; font-family:var(--sans); font-size:15px; color:var(--vellum-dim)}
+  .reservoir{position:sticky; top:0; z-index:20; background:var(--ink); padding:10px 0 12px; border-bottom:1px solid var(--ink3)}
+  .pool{display:flex; flex-wrap:wrap; align-items:baseline; gap:6px 8px; font-family:var(--sans); font-size:15px; color:var(--vellum-dim)}
   .pool b{font-size:22px; font-weight:600; color:var(--vellum); font-variant-numeric:tabular-nums}
-  .pool + .pool{margin-top:8px}
+  .pool+.pool{margin-top:8px}
   .track{height:7px; background:var(--ink3); margin-top:5px; overflow:hidden}
   .fill{height:100%; width:0%; background:var(--bronze); transition:width .18s ease}
-  .fill.skills{background:var(--portal-dim)}
-  .over b{color:var(--blood)}
-  .over .fill{background:var(--blood)}
-
+  .fill.sk{background:var(--portal-dim)}
   .grid{display:grid; gap:10px; grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
-  .pick{
-    text-align:left; font:inherit; color:var(--vellum); cursor:pointer;
-    background:var(--ink2); border:1px solid var(--ink3); border-radius:2px;
-    padding:11px 13px;
-  }
+  .pick{text-align:left; font:inherit; color:var(--vellum); cursor:pointer; background:var(--ink2); border:1px solid var(--ink3); border-radius:2px; padding:11px 13px}
   .pick:hover{border-color:var(--bronze-dim)}
   .pick[aria-pressed="true"]{border-color:var(--bronze); background:var(--ink3); box-shadow:inset 3px 0 0 var(--bronze)}
   .pick .nm{display:block; font-size:18px}
   .pick .sub{display:block; font-family:var(--sans); font-size:13.5px; color:var(--vellum-dim); line-height:1.35; margin-top:3px}
-  .pick:focus-visible, button:focus-visible, input:focus-visible{outline:2px solid var(--portal); outline-offset:2px}
-
+  .pick:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--portal); outline-offset:2px}
   .attr{display:grid; grid-template-columns:1fr auto; gap:2px 10px; align-items:center; padding:10px 0; border-bottom:1px solid var(--ink3)}
   .attr .nm{font-size:18px}
   .attr .why{grid-column:1/2; font-family:var(--sans); font-size:13px; color:var(--vellum-dim); line-height:1.3}
   .attr .val{font-family:var(--sans); font-size:26px; font-weight:600; font-variant-numeric:tabular-nums; grid-row:1/3; text-align:right; min-width:2.4em}
   .attr .row{grid-column:1/3; display:flex; align-items:center; gap:10px; margin-top:8px}
   input[type=range]{flex:1; accent-color:var(--bronze); height:22px; min-width:0}
-  .step{
-    font-family:var(--sans); font-size:17px; font-weight:600; color:var(--vellum);
-    background:var(--ink2); border:1px solid var(--ink3); border-radius:2px;
-    width:38px; height:34px; cursor:pointer; flex:none;
-  }
+  .step{font-family:var(--sans); font-size:17px; font-weight:600; color:var(--vellum); background:var(--ink2); border:1px solid var(--ink3); border-radius:2px; width:38px; height:34px; cursor:pointer; flex:none}
   .step:hover:not(:disabled){border-color:var(--bronze)}
   .step:disabled{opacity:.35; cursor:default}
-
   .derived{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:16px 0 4px}
   .derived div{background:var(--ink2); padding:11px 12px}
   .derived span{display:block; font-family:var(--sans); font-size:13px; color:var(--vellum-dim)}
   .derived b{font-family:var(--sans); font-size:23px; font-weight:600; font-variant-numeric:tabular-nums}
-
   .skgroup{margin-top:18px}
   .skgroup h3{font-size:15px; font-weight:500; font-family:var(--sans); letter-spacing:.06em; color:var(--bronze); margin:0 0 4px; border-bottom:1px solid var(--ink3); padding-bottom:4px}
   .sk{display:grid; grid-template-columns:1fr auto auto; gap:0 8px; align-items:center; padding:7px 0; border-bottom:1px solid #1f2939}
@@ -85,10 +62,8 @@
   .chip{font-family:var(--sans); font-size:12px; letter-spacing:.04em; padding:1px 6px; border:1px solid var(--ink3); color:var(--vellum-dim)}
   .chip.t{color:var(--bronze); border-color:var(--bronze-dim)}
   .chip.s{color:var(--portal); border-color:var(--portal-dim)}
-  .chip.lock{color:var(--vellum-dim)}
-
   .summary{background:var(--ink2); padding:16px 16px 18px; margin-top:14px}
-  .summary pre{font-family:var(--sans); font-size:14.5px; line-height:1.55; white-space:pre-wrap; margin:0; color:var(--vellum)}
+  .summary pre{font-family:var(--sans); font-size:14.5px; line-height:1.55; white-space:pre-wrap; margin:0}
   .bar{display:flex; flex-wrap:wrap; gap:8px; margin-top:14px}
   .btn{font-family:var(--sans); font-size:15px; color:var(--vellum); background:transparent; border:1px solid var(--bronze-dim); border-radius:2px; padding:8px 14px; cursor:pointer}
   .btn:hover{border-color:var(--bronze); background:var(--ink2)}
@@ -98,6 +73,7 @@
   .flag{font-family:var(--sans); font-size:14px; color:var(--portal); margin:10px 0 0}
   .flag.bad{color:var(--blood)}
   footer{border-top:1px solid var(--ink3); margin-top:30px; padding-top:16px; color:var(--vellum-dim); font-size:15px}
+  footer p{margin:0 0 10px}
   .saves{font-family:var(--sans); font-size:14px; color:var(--vellum-dim); margin-top:10px}
   .saves button{font-family:var(--sans); font-size:14px; background:transparent; border:none; border-bottom:1px dotted var(--portal-dim); color:var(--portal); cursor:pointer; padding:0 0 1px; margin-right:12px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -105,22 +81,22 @@
 
 <div class="wrap">
   <h1>Dereth character builder</h1>
-  <p class="lede">Heritage, profession, attributes, skills — planned before you ever reach the Lifestone.</p>
+  <p class="lede">Heritage, class, attributes, skills — planned before you ever reach the Lifestone.</p>
 
   <div class="reservoir">
-    <div class="pool" id="apool">
-      <span>Attribute credits</span><b id="acred">330</b><span>of 330 remaining</span>
+    <div class="pool">
+      <span>Attribute points</span><b id="acred">330</b><span>of 330 left to place</span>
     </div>
     <div class="track"><div class="fill" id="afill"></div></div>
-    <div class="pool" id="spool">
-      <span>Training credits</span><b id="scred">0</b><span>of 50 remaining</span>
+    <div class="pool">
+      <span>Skill credits</span><b id="scred">50</b><span>of 50 remaining</span>
     </div>
-    <div class="track"><div class="fill skills" id="sfill"></div></div>
+    <div class="track"><div class="fill sk" id="sfill"></div></div>
   </div>
 
   <section>
     <h2>Heritage</h2>
-    <p class="hint">Your people set the skills you are trained in for free. Those cannot be lowered.</p>
+    <p class="hint">Your people train you in one or two skills at no cost. Everyone is also trained in Jump, Run, Magic Defense, and Loyalty for free.</p>
     <div class="grid" id="heritages"></div>
     <div class="name">
       <input id="charname" placeholder="Character name" aria-label="Character name">
@@ -129,15 +105,15 @@
   </section>
 
   <section>
-    <h2>Profession</h2>
-    <p class="hint">A profession presets your attributes and skills. Custom gives you all 330 credits and 50 training credits to spend yourself.</p>
-    <div class="grid" id="professions"></div>
+    <h2>Class</h2>
+    <p class="hint">Each preset spends all 330 attribute points and all 50 skill credits, and its skill list changes with your heritage.</p>
+    <div class="grid" id="classes"></div>
     <p class="flag" id="drift"></p>
   </section>
 
   <section>
     <h2>Attributes</h2>
-    <p class="hint">Each attribute starts at 10 and tops out at 100. Health and Stamina follow Endurance; Mana follows Self.</p>
+    <p class="hint">Six attributes share 330 points. Each starts at 10 and tops out at 100. Health is half your Endurance, Stamina equals it, and Mana equals Self.</p>
     <div id="attrs"></div>
     <div class="derived">
       <div><span>Health</span><b id="dHealth">5</b></div>
@@ -148,7 +124,7 @@
 
   <section>
     <h2>Skills</h2>
-    <p class="hint">Tap + to raise a skill from untrained to trained, then to specialized. Specialized can only be bought now, during creation — never later.</p>
+    <p class="hint">Training adds 5 to a skill, specializing adds 10 more and makes it rise faster with use. You can only specialize now, during creation.</p>
     <div id="skills"></div>
   </section>
 
@@ -164,7 +140,8 @@
   </section>
 
   <footer>
-    Heritage training, profession templates, attribute range, and the four skill classes come from the manual. The manual prints only one skill formula (Alchemy = [Coordination + Focus] ÷ 3), so every other base value here uses that same pattern with the governing attributes the manual names, and credit costs are a reasonable house scale rather than the live game's table.
+    <p>Costs, formulas, training bonuses, and class templates come from Table 2.1 and chapter 2 of the Sybex <i>Official Strategies &amp; Secrets</i> guide, 1999. The 330-point attribute spread and the four skill classes come from the boxed game manual.</p>
+    <p>Two gaps in the source, left as printed rather than patched over: the guide omits Unarmed Combat from Table 2.1, so its 6 / 6 cost comes from outside the book; and the Aluvian warrior list spends only 38 of its 50 credits, so that preset opens with 12 unspent.</p>
   </footer>
 </div>
 
@@ -172,139 +149,161 @@
 const ATTRS=[
   {k:"Strength",why:"Melee damage and carrying capacity"},
   {k:"Endurance",why:"Health, Stamina, damage you can absorb"},
-  {k:"Coordination",why:"Missile accuracy, trade skills, lockpicking"},
-  {k:"Quickness",why:"Attack speed and evasion"},
+  {k:"Coordination",why:"Weapons, defenses, craft skills, lockpicking"},
+  {k:"Quickness",why:"Defenses and Run"},
   {k:"Focus",why:"Spellcasting, appraisal, healing kits"},
   {k:"Self",why:"Mana, willpower, Leadership and Loyalty"}
 ];
-const S=1,E=2,C=3,Q=4,F=5,SF=6;
 const AK=["Strength","Endurance","Coordination","Quickness","Focus","Self"];
+const ST="Strength",EN="Endurance",CO="Coordination",QU="Quickness",FO="Focus",SE="Self";
 const SKILLS=[
-  ["Axe","Weapons",["Strength","Coordination"],3,4,8],
-  ["Dagger","Weapons",["Strength","Coordination"],3,4,8],
-  ["Mace","Weapons",["Strength","Coordination"],3,4,8],
-  ["Spear","Weapons",["Strength","Coordination"],3,4,8],
-  ["Staff","Weapons",["Strength","Coordination"],3,4,8],
-  ["Sword","Weapons",["Strength","Coordination"],3,4,8],
-  ["Unarmed Combat","Weapons",["Strength","Coordination"],3,4,8],
-  ["Bow","Weapons",["Coordination"],2,4,8],
-  ["Crossbow","Weapons",["Coordination"],2,4,8],
-  ["Thrown Weapons","Weapons",["Coordination"],2,4,8],
-  ["Melee Defense","Defense",["Coordination","Quickness"],3,4,8],
-  ["Missile Defense","Defense",["Coordination","Quickness"],3,4,8],
-  ["Magic Defense","Defense",["Focus","Self"],3,4,8],
-  ["Creature Enchantment","Magic",["Focus","Self"],3,8,12,1],
-  ["Item Enchantment","Magic",["Focus","Self"],3,8,12,1],
-  ["Life Magic","Magic",["Focus","Self"],3,8,12,1],
-  ["War Magic","Magic",["Focus","Self"],3,8,12,1],
-  ["Arcane Lore","Magic",["Focus","Self"],3,2,4],
-  ["Mana Conversion","Magic",["Focus","Self"],3,4,6],
-  ["Appraise Armor","Lore",["Focus"],2,2,4],
-  ["Appraise Item","Lore",["Focus"],2,2,4],
-  ["Appraise Weapon","Lore",["Focus"],2,2,4],
-  ["Appraise Magic Item","Lore",["Focus","Self"],3,4,6],
-  ["Assess Creature","Lore",["Focus"],2,2,4],
-  ["Assess Person","Lore",["Focus"],2,2,4],
-  ["Alchemy","Trade",["Coordination","Focus"],3,4,6],
-  ["Cooking","Trade",["Coordination","Focus"],3,2,4],
-  ["Fletching","Trade",["Coordination","Focus"],3,4,6],
-  ["Deception","Knack",["Focus","Self"],3,4,6],
-  ["Healing","Knack",["Coordination","Focus"],3,4,6],
-  ["Jump","Knack",["Strength","Coordination"],3,2,4],
-  ["Lockpick","Knack",["Coordination","Focus"],3,4,6],
-  ["Run","Knack",["Quickness"],2,2,4],
-  ["Leadership","Knack",["Self"],2,2,4],
-  ["Loyalty","Knack",["Self"],2,2,4]
+  ["Axe","Weapons",[ST,CO],3,6,6],
+  ["Dagger","Weapons",[QU,CO],3,4,4],
+  ["Mace","Weapons",[ST,CO],3,6,6],
+  ["Spear","Weapons",[ST,CO],3,4,4],
+  ["Staff","Weapons",[ST,CO],3,4,4],
+  ["Sword","Weapons",[ST,CO],3,8,8],
+  ["Unarmed Combat","Weapons",[ST,CO],3,6,6],
+  ["Bow","Weapons",[CO],2,8,8],
+  ["Crossbow","Weapons",[CO],2,6,4],
+  ["Thrown Weapons","Weapons",[CO],2,6,6],
+  ["Melee Defense","Defense",[QU,CO],3,10,10],
+  ["Missile Defense","Defense",[QU,CO],5,8,8],
+  ["Magic Defense","Defense",[FO,SE],10,null,12],
+  ["Creature Enchantment","Magic",[FO,SE],4,8,8,1],
+  ["Item Enchantment","Magic",[FO,SE],4,8,8,1],
+  ["Life Magic","Magic",[FO,SE],4,12,8,1],
+  ["War Magic","Magic",[FO,SE],4,16,12,1],
+  ["Arcane Lore","Magic",[FO],3,4,2],
+  ["Mana Conversion","Magic",[FO,SE],6,6,6],
+  ["Appraise Armor","Lore",[FO],1,4,2],
+  ["Appraise Item","Lore",[FO],1,2,2],
+  ["Appraise Weapon","Lore",[FO],1,4,2],
+  ["Appraise Magic Item","Lore",[FO],1,4,4],
+  ["Assess Creature","Lore",[FO,SE],3,4,2],
+  ["Assess Person","Lore",[FO,SE],3,2,2],
+  ["Alchemy","Trade",[CO,FO],3,7,8],
+  ["Cooking","Trade",[CO,FO],3,4,4],
+  ["Fletching","Trade",[CO,FO],3,4,4],
+  ["Deception","Knack",[FO,SE],4,4,2],
+  ["Healing","Knack",[FO,CO],3,6,4],
+  ["Lockpick","Knack",[CO,FO],3,6,4],
+  ["Leadership","Knack",[SE],1,4,2],
+  ["Jump","Knack",[ST,CO],2,null,4],
+  ["Run","Knack",[QU],1,null,4],
+  ["Loyalty","Knack",[SE],1,null,2]
 ].map(r=>({name:r[0],group:r[1],attrs:r[2],div:r[3],train:r[4],spec:r[5],unusable:!!r[6]}));
 const GROUPS=["Weapons","Defense","Magic","Lore","Trade","Knack"];
-const GROUPLABEL={Weapons:"Weapons",Defense:"Defense",Magic:"Magic",Lore:"Appraisal and lore",Trade:"Trade skills",Knack:"Body and wit"};
+const GROUPLABEL={Weapons:"Weapons",Defense:"Defense",Magic:"Magic",Lore:"Appraisal and lore",Trade:"Craft skills",Knack:"Body and wit"};
+const SKILL_CREDITS=50, ATTR_TOTAL=330, BASE=10, CAP=100;
 
 const HERITAGE={
-  Aluvian:{blurb:"Warlike but loyal, northeast Osteth. Code of Pwyll.",trained:["Assess Person","Dagger"],
+  Aluvian:{blurb:"The most warlike group, with a long history of warriors.",trained:["Assess Person","Dagger"],
     names:["Brethym","Cyndal Farson","Ostan the Quick","Seltor","Trothard Litson","Wodrith the Bear","Girdulla","Adelia Brathmad","Ceranne the Golden","Feristal","Megurtha Dermad","Lanida the True"]},
-  "Gharu'ndim":{blurb:"Desert traders who prize a sharp mind. Central and western Osteth.",trained:["Appraise Item","Staff"],
+  "Gharu'ndim":{blurb:"Once fierce warriors, now traders and scholars well suited to magic.",trained:["Appraise Item","Staff"],
     names:["Isufris","Akkah al-Munib","Hanril ibn Tadwas","Jamraj","Qumud al-Riyf","Zur ibn Atri","Biyafah","Yahida al-Qa'nif","Fathna bint Baljid","Nayiza","Mara al-Luq","Djusala bint Sida"]},
-  Sho:{blurb:"Disciplined and reserved; unarmed combat as art. Southeastern Osteth.",trained:["Unarmed Combat"],
+  Sho:{blurb:"Mystics of Jojiism: humility, discipline, and unarmed combat as art.",trained:["Unarmed Combat"],
     names:["Jhong Mi","Hei Shikken","Kou-long Shui","Lun Zen","Ryucho Xao","Eng Lun-ji","Zai Nozhen","Den Lu-ki","Guroku Soben","Ka-yen Ha","Chun Yao","Ai Rashoku"]}
 };
+const FREE_TRAINED=["Jump","Run","Magic Defense","Loyalty"];
 
-const PROFS={
-  Custom:{blurb:"All attributes at 10, 50 training credits, no preset skills. Known as an adventurer.",
-    attrs:[10,10,10,10,10,10],spec:[],trained:[],credits:50,kit:"Nothing preset"},
-  Archer:{blurb:"Bows, weighted to Coordination and Quickness.",
-    attrs:[40,60,90,90,60,50],spec:["Bow","Missile Defense","Fletching"],
-    trained:["Appraise Weapon","Assess Person","Jump","Magic Defense","Run","Spear"],credits:0,
-    kit:"Practice bow, arrows, spear"},
-  Blademaster:{blurb:"Swords and knives. Strength, Coordination, Quickness.",
-    attrs:[85,70,80,80,40,35],spec:["Melee Defense","Sword"],
-    trained:["Appraise Weapon","Dagger","Jump","Magic Defense","Run","Thrown Weapons"],credits:0,
-    kit:"Practice sword, throwing weapons, knife"},
-  Enchanter:{blurb:"Spells that alter creatures and items. Focus and Self.",
-    attrs:[35,60,50,45,100,100],spec:["Appraise Magic Item","Creature Enchantment","Item Enchantment"],
-    trained:["Arcane Lore","Jump","Magic Defense","Mana Conversion","Run"],credits:0,
-    kit:"Wand, 3 item + 3 creature spells, components"},
-  "Life Mage":{blurb:"Healing and protection. Coordination, Focus, Self.",
-    attrs:[30,60,70,45,95,90],spec:["Life Magic"],
-    trained:["Alchemy","Arcane Lore","Assess Person","Healing","Jump","Magic Defense","Mana Conversion","Run"],credits:0,
-    kit:"Two healing kits, wand, 3 Life spells, components"},
-  Sorcerer:{blurb:"Combat magic and mana. Focus and Self.",
-    attrs:[30,60,50,50,100,100],spec:["Arcane Lore","Mana Conversion","War Magic"],
-    trained:["Appraise Magic Item","Jump","Magic Defense","Run"],credits:0,
-    kit:"Wand, 3 War Magic spells, components"},
-  Vagabond:{blurb:"Locks, appraisal, deception. Coordination, Quickness, Focus.",
-    attrs:[45,55,90,85,85,30],spec:["Appraise Item","Appraise Magic Item","Deception","Lockpick"],
-    trained:["Cooking","Dagger","Jump","Magic Defense","Missile Defense","Run","Thrown Weapons"],credits:0,
-    kit:"Practice dagger, practice lockpicks"},
-  Warrior:{blurb:"Every weapon, no specialization. Strength, Endurance, Coordination.",
-    attrs:[90,90,85,65,35,25],spec:[],
-    trained:["Appraise Armor","Appraise Weapon","Assess Creature","Axe","Crossbow","Jump","Magic Defense","Melee Defense","Missile Defense","Run","Sword"],credits:0,
-    kit:"Practice sword, crossbow, 30 quarrels, axe"}
+const CLASSES={
+  Custom:{blurb:"Nothing preset. Place all 330 attribute points and 50 skill credits yourself.",attrs:null,by:null},
+  Archer:{blurb:"Kills at a distance, but fragile up close and dependent on ammunition.",
+    attrs:[60,40,80,70,50,30],
+    by:{Aluvian:{spec:["Assess Person","Bow","Missile Defense","Run"],trained:["Appraise Weapon","Assess Creature","Dagger","Jump","Magic Defense","Spear","Loyalty"]},
+        "Gharu'ndim":{spec:["Bow","Missile Defense","Run"],trained:["Appraise Item","Appraise Weapon","Assess Creature","Assess Person","Jump","Magic Defense","Spear","Staff","Loyalty"]},
+        Sho:{spec:["Bow","Missile Defense","Run"],trained:["Appraise Weapon","Assess Creature","Assess Person","Jump","Magic Defense","Spear","Unarmed Combat","Loyalty"]}}},
+  Blademaster:{blurb:"The ultimate swordsman and the easiest preset class to start with.",
+    attrs:[70,50,90,60,40,20],
+    by:{Aluvian:{spec:["Appraise Weapon","Assess Person","Melee Defense","Sword"],trained:["Loyalty","Dagger","Jump","Magic Defense","Run","Thrown Weapons"]},
+        "Gharu'ndim":{spec:["Melee Defense","Sword"],trained:["Appraise Item","Appraise Weapon","Dagger","Jump","Magic Defense","Run","Staff","Thrown Weapons","Loyalty"]},
+        Sho:{spec:["Melee Defense","Sword"],trained:["Appraise Weapon","Dagger","Jump","Magic Defense","Run","Thrown Weapons","Unarmed Combat","Loyalty"]}}},
+  Enchanter:{blurb:"Buffs items and creatures. Hard to solo; best inside a fellowship.",
+    attrs:[30,40,50,30,100,80],
+    by:{Aluvian:{spec:["Appraise Magic Item","Creature Enchantment","Item Enchantment"],trained:["Arcane Lore","Assess Person","Dagger","Jump","Magic Defense","Mana Conversion","Run","Loyalty"]},
+        "Gharu'ndim":{spec:["Appraise Magic Item","Creature Enchantment","Item Enchantment"],trained:["Appraise Item","Arcane Lore","Jump","Magic Defense","Mana Conversion","Run","Staff","Loyalty"]},
+        Sho:{spec:["Appraise Magic Item","Creature Enchantment","Item Enchantment"],trained:["Arcane Lore","Jump","Magic Defense","Mana Conversion","Run","Unarmed Combat","Loyalty"]}}},
+  "Life Mage":{blurb:"Healer and protector. A support role early, slow to gain experience alone.",
+    attrs:[20,60,75,20,90,65],
+    by:{Aluvian:{spec:["Arcane Lore","Assess Creature","Assess Person","Healing","Life Magic"],trained:["Dagger","Jump","Magic Defense","Mana Conversion","Run","Loyalty"]},
+        "Gharu'ndim":{spec:["Arcane Lore","Assess Person","Healing","Life Magic"],trained:["Appraise Item","Assess Creature","Jump","Magic Defense","Mana Conversion","Run","Staff","Loyalty"]},
+        Sho:{spec:["Arcane Lore","Assess Person","Healing","Life Magic"],trained:["Assess Creature","Jump","Magic Defense","Mana Conversion","Run","Unarmed Combat","Loyalty"]}}},
+  Sorcerer:{blurb:"War mage. Weak at first, but gets its own kills and advances fastest of the mages.",
+    attrs:[40,40,40,30,90,90],
+    by:{Aluvian:{spec:["Arcane Lore","Mana Conversion","War Magic"],trained:["Appraise Magic Item","Assess Person","Dagger","Jump","Magic Defense","Run","Loyalty"]},
+        "Gharu'ndim":{spec:["Arcane Lore","Mana Conversion","War Magic"],trained:["Appraise Item","Appraise Magic Item","Jump","Magic Defense","Run","Staff","Loyalty"]},
+        Sho:{spec:["Arcane Lore","Mana Conversion","War Magic"],trained:["Appraise Magic Item","Jump","Magic Defense","Run","Unarmed Combat","Loyalty"]}}},
+  Vagabond:{blurb:"Picks locks, appraises, deceives. Weak in a straight fight.",
+    attrs:[40,40,80,70,80,20],
+    by:{Aluvian:{spec:["Appraise Item","Appraise Magic Item","Dagger","Deception","Jump","Lockpick"],trained:["Assess Person","Magic Defense","Missile Defense","Run","Thrown Weapons","Loyalty"]},
+        "Gharu'ndim":{spec:["Appraise Item","Appraise Magic Item","Deception","Jump","Lockpick"],trained:["Assess Person","Magic Defense","Missile Defense","Run","Staff","Thrown Weapons","Loyalty","Dagger"]},
+        Sho:{spec:["Appraise Item","Appraise Magic Item","Deception","Jump","Lockpick"],trained:["Dagger","Magic Defense","Missile Defense","Run","Thrown Weapons","Unarmed Combat","Loyalty"]}}},
+  Warrior:{blurb:"Jack of all trades: trains many weapons, specializes in none.",
+    attrs:[80,70,70,50,30,30],
+    by:{Aluvian:{spec:[],trained:["Axe","Crossbow","Dagger","Jump","Magic Defense","Melee Defense","Missile Defense","Run","Sword","Loyalty"]},
+        "Gharu'ndim":{spec:[],trained:["Appraise Armor","Appraise Item","Appraise Weapon","Assess Creature","Jump","Mace","Magic Defense","Melee Defense","Missile Defense","Run","Staff","Sword","Thrown Weapons","Loyalty"]},
+        Sho:{spec:[],trained:["Appraise Armor","Appraise Weapon","Assess Creature","Axe","Crossbow","Jump","Magic Defense","Melee Defense","Missile Defense","Run","Sword","Unarmed Combat","Loyalty"]}}}
 };
 
-const ATTR_POOL=330, BASE=10, CAP=100;
-let st={heritage:"Aluvian",prof:"Custom",name:"",attrs:[10,10,10,10,10,10],skills:{},credits:50};
+let st={heritage:"Aluvian",cls:"Custom",name:"",attrs:[10,10,10,10,10,10],skills:{},credits:SKILL_CREDITS};
 
-function heritageTrained(){return HERITAGE[st.heritage].trained}
-function statusOf(n){return st.skills[n]||"untrained"}
-function skill(n){return SKILLS.find(s=>s.name===n)}
-function locked(n){return heritageTrained().includes(n)}
+const skill=n=>SKILLS.find(s=>s.name===n);
+const freeSet=()=>new Set([...FREE_TRAINED,...HERITAGE[st.heritage].trained]);
+const isFree=n=>freeSet().has(n);
+const statusOf=n=>st.skills[n]||"untrained";
 
-function applyProf(p){
-  const t=PROFS[p];
-  st.prof=p; st.attrs=t.attrs.slice(); st.skills={}; st.credits=t.credits;
-  t.trained.forEach(n=>{if(skill(n))st.skills[n]="trained"});
-  t.spec.forEach(n=>{if(skill(n))st.skills[n]="specialized"});
-  heritageTrained().forEach(n=>{if(statusOf(n)==="untrained")st.skills[n]="trained"});
+function templateFor(cn,hn){
+  const c=CLASSES[cn];
+  if(!c.by)return {spec:[],trained:[]};
+  return c.by[hn];
+}
+function expectedStatus(n,cn,hn){
+  const t=templateFor(cn,hn);
+  if(t.spec.includes(n))return "specialized";
+  if(t.trained.includes(n)||FREE_TRAINED.includes(n)||HERITAGE[hn].trained.includes(n))return "trained";
+  return "untrained";
+}
+function templateCost(cn,hn){
+  const t=templateFor(cn,hn), free=new Set([...FREE_TRAINED,...HERITAGE[hn].trained]);
+  let cost=0;
+  t.trained.forEach(n=>{const s=skill(n); if(s&&!free.has(n)&&s.train!=null)cost+=s.train});
+  t.spec.forEach(n=>{const s=skill(n); if(!s)return; if(!free.has(n)&&s.train!=null)cost+=s.train; cost+=s.spec});
+  return cost;
 }
 
-function spentAttr(){return st.attrs.reduce((a,v)=>a+(v-BASE),0)}
-function professionLabel(){
-  if(st.prof==="Custom")return "Adventurer";
-  const t=PROFS[st.prof];
-  const want=new Set([...t.trained,...t.spec].filter(skill));
-  for(const s of SKILLS){
-    const cur=statusOf(s.name);
-    const exp=t.spec.includes(s.name)?"specialized":(t.trained.includes(s.name)||locked(s.name)?"trained":"untrained");
-    if(cur!==exp)return "Adventurer";
-  }
-  if(t.attrs.some((v,i)=>v!==st.attrs[i]))return st.prof;
-  return st.prof;
-}
-function driftedSkills(){
-  if(st.prof==="Custom")return false;
-  const t=PROFS[st.prof];
-  return SKILLS.some(s=>{
-    const exp=t.spec.includes(s.name)?"specialized":(t.trained.includes(s.name)||locked(s.name)?"trained":"untrained");
-    return statusOf(s.name)!==exp;
+function applyClass(cn){
+  st.cls=cn;
+  const c=CLASSES[cn];
+  st.attrs=c.attrs?c.attrs.slice():[BASE,BASE,BASE,BASE,BASE,BASE];
+  st.skills={};
+  SKILLS.forEach(s=>{
+    const e=expectedStatus(s.name,cn,st.heritage);
+    if(e!=="untrained")st.skills[s.name]=e;
   });
+  st.credits=SKILL_CREDITS-templateCost(cn,st.heritage);
 }
 
+const spentAttr=()=>st.attrs.reduce((a,v)=>a+v,0);
+function drifted(){
+  return SKILLS.some(s=>statusOf(s.name)!==expectedStatus(s.name,st.cls,st.heritage));
+}
+function classLabel(){
+  if(st.cls==="Custom")return "Adventurer";
+  if(drifted())return "Adventurer";
+  return st.cls;
+}
+function bonusOf(n){const s=statusOf(n); return s==="specialized"?10:s==="trained"?5:0}
 function baseSkill(s){
   const sum=s.attrs.reduce((a,k)=>a+st.attrs[AK.indexOf(k)],0);
-  return Math.floor(sum/s.div);
+  return Math.floor(sum/s.div)+bonusOf(s.name);
+}
+function formulaText(s){
+  const j=s.attrs.map(a=>a.slice(0,5)).join(" + ");
+  return s.div>1?(s.attrs.length>1?"("+j+") ÷ "+s.div:j+" ÷ "+s.div):j;
 }
 
-function el(t,c,x){const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e}
+const el=(t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e};
 
 function buildPickers(){
   const h=document.getElementById("heritages"); h.innerHTML="";
@@ -312,45 +311,44 @@ function buildPickers(){
     const b=el("button","pick"); b.type="button";
     b.appendChild(el("span","nm",k));
     b.appendChild(el("span","sub",HERITAGE[k].blurb));
-    b.appendChild(el("span","sub","Free training: "+HERITAGE[k].trained.join(", ")));
-    b.onclick=()=>{st.heritage=k; applyProf(st.prof); render()};
+    b.appendChild(el("span","sub","Free: "+HERITAGE[k].trained.join(", ")));
+    b.onclick=()=>{st.heritage=k; applyClass(st.cls); render()};
     h.appendChild(b);
   });
-  const p=document.getElementById("professions"); p.innerHTML="";
-  Object.keys(PROFS).forEach(k=>{
+  const c=document.getElementById("classes"); c.innerHTML="";
+  Object.keys(CLASSES).forEach(k=>{
     const b=el("button","pick"); b.type="button";
     b.appendChild(el("span","nm",k==="Custom"?"Custom character":k));
-    b.appendChild(el("span","sub",PROFS[k].blurb));
-    b.appendChild(el("span","sub","Starts with: "+PROFS[k].kit));
-    b.onclick=()=>{applyProf(k); render()};
-    p.appendChild(b);
+    b.appendChild(el("span","sub",CLASSES[k].blurb));
+    b.onclick=()=>{applyClass(k); render()};
+    c.appendChild(b);
   });
 }
 
 function buildAttrs(){
   const box=document.getElementById("attrs"); box.innerHTML="";
+  const left=ATTR_TOTAL-spentAttr();
   ATTRS.forEach((a,i)=>{
     const d=el("div","attr");
     d.appendChild(el("div","nm",a.k));
-    const v=el("div","val",String(st.attrs[i])); d.appendChild(v);
+    d.appendChild(el("div","val",String(st.attrs[i])));
     d.appendChild(el("div","why",a.why));
     const row=el("div","row");
     const minus=el("button","step","−"); minus.type="button"; minus.setAttribute("aria-label","Lower "+a.k);
     const plus=el("button","step","+"); plus.type="button"; plus.setAttribute("aria-label","Raise "+a.k);
     const r=document.createElement("input");
-    r.type="range"; r.min=BASE; r.max=CAP; r.step=1; r.value=st.attrs[i];
-    r.setAttribute("aria-label",a.k);
+    r.type="range"; r.min=BASE; r.max=CAP; r.step=1; r.value=st.attrs[i]; r.setAttribute("aria-label",a.k);
     const set=n=>{
       n=Math.max(BASE,Math.min(CAP,n));
-      const other=spentAttr()-(st.attrs[i]-BASE);
-      if(other+(n-BASE)>ATTR_POOL)n=BASE+(ATTR_POOL-other);
+      const others=spentAttr()-st.attrs[i];
+      if(others+n>ATTR_TOTAL)n=ATTR_TOTAL-others;
       st.attrs[i]=n; render();
     };
     minus.onclick=()=>set(st.attrs[i]-1);
     plus.onclick=()=>set(st.attrs[i]+1);
     r.oninput=e=>set(parseInt(e.target.value,10));
     minus.disabled=st.attrs[i]<=BASE;
-    plus.disabled=spentAttr()>=ATTR_POOL||st.attrs[i]>=CAP;
+    plus.disabled=left<=0||st.attrs[i]>=CAP;
     row.append(minus,r,plus);
     d.appendChild(row);
     box.appendChild(d);
@@ -363,16 +361,19 @@ function buildAttrs(){
 function raise(n){
   const s=skill(n), cur=statusOf(n);
   if(cur==="specialized")return;
-  const cost=cur==="untrained"?s.train:s.spec-s.train;
-  if(cost>st.credits)return;
-  st.credits-=cost; st.skills[n]=cur==="untrained"?"trained":"specialized"; render();
+  const cost=cur==="untrained"?s.train:s.spec;
+  if(cost==null||cost>st.credits)return;
+  st.credits-=cost;
+  st.skills[n]=cur==="untrained"?"trained":"specialized";
+  render();
 }
 function lower(n){
   const s=skill(n), cur=statusOf(n);
   if(cur==="untrained")return;
-  if(cur==="trained"&&locked(n))return;
-  const refund=cur==="specialized"?s.spec-s.train:s.train;
-  st.credits+=refund; st.skills[n]=cur==="specialized"?"trained":"untrained"; render();
+  if(cur==="trained"&&(isFree(n)||s.train==null))return;
+  st.credits+=cur==="specialized"?s.spec:s.train;
+  st.skills[n]=cur==="specialized"?"trained":"untrained";
+  render();
 }
 
 function buildSkills(){
@@ -381,25 +382,25 @@ function buildSkills(){
     const wrap=el("div","skgroup");
     wrap.appendChild(el("h3",null,GROUPLABEL[g]));
     SKILLS.filter(s=>s.group===g).forEach(s=>{
-      const stt=statusOf(s.name);
+      const stt=statusOf(s.name), free=isFree(s.name)||s.train==null;
       const d=el("div","sk st-"+stt);
-      const nm=el("div","nm",s.name); d.appendChild(nm);
+      d.appendChild(el("div","nm",s.name));
       const usable=!(s.unusable&&stt==="untrained");
-      const b=el("div","base",usable?String(baseSkill(s)):"—"); d.appendChild(b);
+      d.appendChild(el("div","base",usable?String(baseSkill(s)):"—"));
       const ctl=el("div","ctl");
       const minus=el("button","step","−"); minus.type="button"; minus.setAttribute("aria-label","Lower "+s.name);
       const plus=el("button","step","+"); plus.type="button"; plus.setAttribute("aria-label","Raise "+s.name);
       minus.onclick=()=>lower(s.name); plus.onclick=()=>raise(s.name);
-      minus.disabled=stt==="untrained"||(stt==="trained"&&locked(s.name));
-      const nextCost=stt==="untrained"?s.train:(stt==="trained"?s.spec-s.train:0);
-      plus.disabled=stt==="specialized"||nextCost>st.credits;
+      minus.disabled=stt==="untrained"||(stt==="trained"&&free);
+      const next=stt==="untrained"?s.train:(stt==="trained"?s.spec:null);
+      plus.disabled=stt==="specialized"||next==null||next>st.credits;
       ctl.append(minus,plus); d.appendChild(ctl);
       const meta=el("div","meta");
-      const chip=el("span","chip"+(stt==="trained"?" t":stt==="specialized"?" s":""),
-        locked(s.name)&&stt==="trained"?"trained by heritage":stt);
-      meta.appendChild(chip);
-      const bits=[" ",s.attrs.join(" + ")+" ÷ "+s.div];
-      if(stt!=="specialized")bits.push("next: "+nextCost+" cr");
+      let label=stt;
+      if(stt==="trained"&&free)label=s.train==null?"trained by default":"trained by heritage";
+      meta.appendChild(el("span","chip"+(stt==="trained"?" t":stt==="specialized"?" s":""),label));
+      const bits=[formulaText(s)];
+      if(next!=null)bits.push("next: "+next+" cr");
       if(s.unusable&&stt==="untrained")bits.push("unusable until trained");
       meta.appendChild(document.createTextNode("  "+bits.join("  ·  ")));
       d.appendChild(meta);
@@ -410,41 +411,34 @@ function buildSkills(){
 }
 
 function buildSheet(){
-  const spec=SKILLS.filter(s=>statusOf(s.name)==="specialized").map(s=>s.name+" "+baseSkill(s));
-  const tr=SKILLS.filter(s=>statusOf(s.name)==="trained").map(s=>s.name+" "+baseSkill(s));
+  const val=n=>baseSkill(skill(n));
+  const spec=SKILLS.filter(s=>statusOf(s.name)==="specialized").map(s=>s.name+" "+val(s.name));
+  const tr=SKILLS.filter(s=>statusOf(s.name)==="trained").map(s=>s.name+" "+val(s.name));
   const L=[];
-  L.push((st.name||"Unnamed")+" — "+st.heritage+" "+professionLabel().toLowerCase());
+  L.push((st.name||"Unnamed")+" — "+st.heritage+" "+classLabel().toLowerCase());
   L.push("");
-  L.push(AK.map((k,i)=>k.slice(0,4)+" "+st.attrs[i]).join("   "));
+  L.push(AK.map((k,i)=>k.slice(0,5)+" "+st.attrs[i]).join("   "));
   L.push("Health "+Math.floor(st.attrs[1]/2)+"   Stamina "+st.attrs[1]+"   Mana "+st.attrs[5]);
   L.push("");
   L.push("Specialized: "+(spec.length?spec.join(", "):"none"));
   L.push("Trained: "+(tr.length?tr.join(", "):"none"));
   L.push("");
-  L.push("Unspent: "+(ATTR_POOL-spentAttr())+" attribute credits, "+st.credits+" training credits");
-  if(st.prof!=="Custom")L.push("Starting kit: "+PROFS[st.prof].kit);
+  L.push("Unplaced: "+(ATTR_TOTAL-spentAttr())+" attribute points, "+st.credits+" skill credits");
   document.getElementById("sheet").textContent=L.join("\n");
 }
 
 function render(){
-  const left=ATTR_POOL-spentAttr();
-  document.getElementById("acred").textContent=left;
-  document.getElementById("afill").style.width=(spentAttr()/ATTR_POOL*100)+"%";
+  document.getElementById("acred").textContent=ATTR_TOTAL-spentAttr();
+  document.getElementById("afill").style.width=(spentAttr()/ATTR_TOTAL*100)+"%";
   document.getElementById("scred").textContent=st.credits;
-  const capS=Math.max(50,st.credits);
-  document.getElementById("sfill").style.width=((capS-st.credits)/capS*100)+"%";
+  document.getElementById("sfill").style.width=((SKILL_CREDITS-st.credits)/SKILL_CREDITS*100)+"%";
   document.getElementById("charname").value=st.name;
-
-  document.querySelectorAll("#heritages .pick").forEach((b,i)=>
-    b.setAttribute("aria-pressed",String(Object.keys(HERITAGE)[i]===st.heritage)));
-  document.querySelectorAll("#professions .pick").forEach((b,i)=>
-    b.setAttribute("aria-pressed",String(Object.keys(PROFS)[i]===st.prof)));
-
+  document.querySelectorAll("#heritages .pick").forEach((b,i)=>b.setAttribute("aria-pressed",String(Object.keys(HERITAGE)[i]===st.heritage)));
+  document.querySelectorAll("#classes .pick").forEach((b,i)=>b.setAttribute("aria-pressed",String(Object.keys(CLASSES)[i]===st.cls)));
   const df=document.getElementById("drift");
-  if(st.prof==="Custom"){df.className="flag"; df.textContent="Custom characters are known as adventurers."}
-  else if(driftedSkills()){df.className="flag bad"; df.textContent="Skills now differ from the "+st.prof.toLowerCase()+" template — this character will be known as an adventurer."}
-  else{df.className="flag"; df.textContent=st.prof+" template intact."}
-
+  if(st.cls==="Custom"){df.className="flag"; df.textContent="A custom character is known as an adventurer."}
+  else if(drifted()){df.className="flag bad"; df.textContent="Skills no longer match the "+st.cls.toLowerCase()+" template — this character becomes an adventurer."}
+  else{df.className="flag"; df.textContent=st.cls+" template intact ("+st.heritage+" variant)."}
   buildAttrs(); buildSkills(); buildSheet();
 }
 
@@ -454,41 +448,41 @@ document.getElementById("rollname").onclick=()=>{
   st.name=n[Math.floor(Math.random()*n.length)];
   document.getElementById("charname").value=st.name; buildSheet();
 };
-document.getElementById("copy").onclick=async()=>{
-  const t=document.getElementById("sheet").textContent;
-  try{await navigator.clipboard.writeText(t); flash("copy","Copied")}catch(e){flash("copy","Select and copy above")}
-};
-document.getElementById("reset").onclick=()=>{st.name="";applyProf("Custom");render()};
 function flash(id,msg){const b=document.getElementById(id),o=b.textContent;b.textContent=msg;setTimeout(()=>b.textContent=o,1400)}
+document.getElementById("copy").onclick=async()=>{
+  try{await navigator.clipboard.writeText(document.getElementById("sheet").textContent); flash("copy","Copied")}
+  catch(e){flash("copy","Select and copy above")}
+};
+document.getElementById("reset").onclick=()=>{st.name=""; applyClass("Custom"); render()};
 
 const KEY="ac-builds";
+async function readList(){try{const r=await window.storage.get(KEY); return r?JSON.parse(r.value):[]}catch(e){return []}}
 async function loadSaves(){
   const box=document.getElementById("saves");
-  if(!window.storage){box.textContent="";return}
-  let list=[];
-  try{const r=await window.storage.get(KEY); list=r?JSON.parse(r.value):[]}catch(e){list=[]}
+  if(!window.storage){box.textContent=""; return}
+  const list=await readList();
   box.innerHTML="";
-  if(!list.length){box.textContent="No saved builds yet.";return}
+  if(!list.length){box.textContent="No saved builds yet."; return}
   box.appendChild(document.createTextNode("Saved: "));
   list.forEach((b,i)=>{
     const t=document.createElement("button");
-    t.textContent=(b.name||"Unnamed")+" ("+b.heritage+" "+b.prof.toLowerCase()+")";
+    t.textContent=(b.name||"Unnamed")+" ("+b.heritage+" "+b.cls.toLowerCase()+")";
     t.onclick=()=>{st=JSON.parse(JSON.stringify(b)); render()};
     box.appendChild(t);
     const x=document.createElement("button");
     x.textContent="remove"; x.style.opacity=".7";
-    x.onclick=async()=>{list.splice(i,1); try{await window.storage.set(KEY,JSON.stringify(list))}catch(e){} loadSaves()};
+    x.onclick=async()=>{const l=await readList(); l.splice(i,1); try{await window.storage.set(KEY,JSON.stringify(l))}catch(e){} loadSaves()};
     box.appendChild(x);
   });
 }
 document.getElementById("save").onclick=async()=>{
-  if(!window.storage){flash("save","Saving unavailable");return}
-  let list=[];
-  try{const r=await window.storage.get(KEY); list=r?JSON.parse(r.value):[]}catch(e){list=[]}
-  list.unshift(JSON.parse(JSON.stringify(st))); list=list.slice(0,8);
+  if(!window.storage){flash("save","Saving unavailable"); return}
+  let list=await readList();
+  list.unshift(JSON.parse(JSON.stringify(st)));
+  list=list.slice(0,8);
   try{await window.storage.set(KEY,JSON.stringify(list)); flash("save","Saved")}catch(e){flash("save","Save failed")}
   loadSaves();
 };
 
-buildPickers(); applyProf("Custom"); render(); loadSaves();
+buildPickers(); applyClass("Custom"); render(); loadSaves();
 </script>

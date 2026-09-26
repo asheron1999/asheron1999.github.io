@@ -59,6 +59,13 @@
   .sk .ctl .step{width:32px; height:31px; font-size:15px}
   .sk.st-trained{background:linear-gradient(to right,rgba(181,138,75,.09),transparent 60%)}
   .sk.st-specialized{background:linear-gradient(to right,rgba(87,174,203,.14),transparent 60%)}
+  .filters{display:flex; flex-wrap:wrap; gap:6px; margin:0 0 6px}
+  .filters button{font-family:var(--sans); font-size:13.5px; color:var(--vellum-dim); background:transparent; border:1px solid var(--ink3); border-radius:2px; padding:4px 10px; cursor:pointer}
+  .filters button:hover{border-color:var(--bronze-dim)}
+  .filters button[aria-pressed="true"]{color:var(--vellum); border-color:var(--bronze); background:var(--ink2)}
+  .sk .nm.tap{cursor:pointer; border-bottom:1px dotted var(--bronze-dim); display:inline-block}
+  .sk .nm.tap:hover{border-bottom-color:var(--bronze)}
+  .sk .desc{grid-column:1/4; font-size:15.5px; line-height:1.45; color:var(--vellum-dim); margin:4px 0 2px; padding-left:2px; border-left:2px solid var(--bronze-dim); padding-left:10px}
   .chip{font-family:var(--sans); font-size:12px; letter-spacing:.04em; padding:1px 6px; border:1px solid var(--ink3); color:var(--vellum-dim)}
   .chip.t{color:var(--bronze); border-color:var(--bronze-dim)}
   .chip.s{color:var(--portal); border-color:var(--portal-dim)}
@@ -91,6 +98,23 @@
   .saves{font-family:var(--sans); font-size:14px; color:var(--vellum-dim); margin-top:10px}
   .saves button{font-family:var(--sans); font-size:14px; background:transparent; border:none; border-bottom:1px dotted var(--portal-dim); color:var(--portal); cursor:pointer; padding:0 0 1px; margin-right:12px}
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+  #printable{display:none}
+  @media print{
+    @page{margin:16mm}
+    body{background:#fff; color:#000; font-size:11pt}
+    .wrap>*{display:none!important}
+    #printable{display:block!important}
+    #printable h1{font-size:20pt; font-weight:500; margin:0 0 2px}
+    #printable .sub{font-style:italic; color:#444; margin:0 0 16px}
+    #printable h2{font-size:12pt; font-weight:600; margin:16px 0 6px; border-bottom:1px solid #999; padding-bottom:3px}
+    #printable table{width:100%; border-collapse:collapse; font-size:10.5pt}
+    #printable td{padding:3px 6px 3px 0; vertical-align:top}
+    #printable td.n{text-align:right; width:3.5em; font-variant-numeric:tabular-nums}
+    #printable .cols{display:flex; gap:24px}
+    #printable .cols>div{flex:1}
+    #printable .note{font-size:9pt; color:#555; margin-top:18px; border-top:1px solid #bbb; padding-top:8px}
+    #printable .blank{color:#888}
+  }
 </style>
 
 <div class="wrap">
@@ -139,6 +163,7 @@
   <section>
     <h2>Skills</h2>
     <p class="hint">Training adds 5 to a skill, specializing adds 10 more and makes it rise faster with use. You can only specialize now, during creation.</p>
+    <div class="filters" id="skfilters"></div>
     <div id="skills"></div>
   </section>
 
@@ -162,6 +187,8 @@
     <div class="summary"><pre id="sheet"></pre></div>
     <div class="bar">
       <button class="btn" id="copy">Copy sheet</button>
+      <button class="btn" id="link">Copy link</button>
+      <button class="btn" id="print">Print sheet</button>
       <button class="btn" id="save">Save build</button>
       <button class="btn warn" id="reset">Start over</button>
     </div>
@@ -172,6 +199,7 @@
     <p>The class templates — attribute spreads and per-heritage skill lists — along with the skill costs, formulas, and training bonuses are taken from chapter 2 and Table 2.1 of <i>Asheron's Call Official Strategies &amp; Secrets</i> by Rusel DeMaria (Sybex Inc., November 1999, 344 pages, ISBN 0782126545). The 330-point attribute spread and the four skill classes are corroborated by the boxed game manual.</p>
     <p>Two gaps in the source, left as printed rather than patched over: the guide omits Unarmed Combat from Table 2.1, so its 6 / 6 cost comes from outside the book; and the Aluvian warrior list spends only 38 of its 50 credits, so that preset opens with 12 unspent.</p>
   </footer>
+  <div id="printable"></div>
 </div>
 
 <script>
@@ -222,6 +250,43 @@ const SKILLS=[
   ["Run","Knack",[QU],1,null,4],
   ["Loyalty","Knack",[SE],1,null,2]
 ].map(r=>({name:r[0],group:r[1],attrs:r[2],div:r[3],train:r[4],spec:r[5],unusable:!!r[6]}));
+const DESC={
+  "Alchemy":"Used to make magical potions and powders.",
+  "Appraise Armor":"Examine armor.",
+  "Appraise Item":"Examine items other than armor and weapons.",
+  "Appraise Magic Item":"Examine magical items.",
+  "Appraise Weapon":"Examine weapons.",
+  "Arcane Lore":"Helps you learn spells from scrolls and use magical items.",
+  "Assess Creature":"Examine a creature's attributes.",
+  "Assess Person":"Examine other characters' attributes.",
+  "Axe":"Skill in using axes and war hammers.",
+  "Bow":"Skill in using bows.",
+  "Cooking":"Cook different types of food.",
+  "Creature Enchantment":"Magic school with spells that adjust skills and attributes.",
+  "Crossbow":"Skill in using crossbows.",
+  "Dagger":"Skill in using daggers, knives, and similar weapons.",
+  "Deception":"Helps prevent others from seeing your attributes.",
+  "Fletching":"Used to make arrows.",
+  "Healing":"Allows you to heal with the use of a healing kit.",
+  "Item Enchantment":"Magic school with spells that adjust the properties of weapons, armor, and items.",
+  "Jump":"Distance you are able to jump, both vertically and, indirectly, horizontally.",
+  "Leadership":"Affects the amount of XP received from vassals in the Allegiance system.",
+  "Life Magic":"Magic school with spells that deal with health, stamina, mana, and protection.",
+  "Lockpick":"Skill in picking locks.",
+  "Loyalty":"Affects the amount of XP donated to your patron in the Allegiance system.",
+  "Mace":"Skill in using maces, clubs, and similar weapons.",
+  "Magic Defense":"Resists or reduces damage caused by magical attacks.",
+  "Mana Conversion":"Reduces the mana spent by spells and magical items.",
+  "Melee Defense":"Skill in avoiding close-quarters attacks.",
+  "Missile Defense":"Skill in avoiding projectile weapon attacks.",
+  "Run":"How fast you run.",
+  "Spear":"Skill in using spears and similar weapons.",
+  "Staff":"Skill in using staves and similar weapons.",
+  "Sword":"Skill in using swords and similar weapons.",
+  "Thrown Weapons":"Skill in using thrown weapons such as darts, shurikens, and similar weapons.",
+  "War Magic":"Magic school with spells that deal with direct damage.",
+  "Unarmed Combat":"Skill in fighting with fists and similar unarmed attacks. Not listed in Table 2.1."
+};
 const GROUPS=["Weapons","Defense","Magic","Lore","Trade","Knack"];
 const GROUPLABEL={Weapons:"Weapons",Defense:"Defense",Magic:"Magic",Lore:"Appraisal and lore",Trade:"Craft skills",Knack:"Body and wit"};
 const SKILL_CREDITS=50, ATTR_TOTAL=330, BASE=10, CAP=100;
@@ -405,15 +470,52 @@ function lower(n){
   render();
 }
 
+const openDesc=new Set();
+let skFilter="all";
+const FILTERS=[["all","All"],["taken","Trained"],["afford","Can raise now"],["untrained","Untrained"]];
+function passesFilter(s){
+  const stt=statusOf(s.name);
+  if(skFilter==="all")return true;
+  if(skFilter==="taken")return stt!=="untrained";
+  if(skFilter==="untrained")return stt==="untrained";
+  if(skFilter==="afford"){
+    if(stt==="specialized")return false;
+    const next=stt==="untrained"?s.train:s.spec;
+    return next!=null&&next<=st.credits;
+  }
+  return true;
+}
+function buildFilters(){
+  const box=document.getElementById("skfilters"); box.innerHTML="";
+  FILTERS.forEach(([k,label])=>{
+    const n=SKILLS.filter(s=>{const old=skFilter; skFilter=k; const r=passesFilter(s); skFilter=old; return r}).length;
+    const b=document.createElement("button"); b.type="button";
+    b.textContent=label+" ("+n+")";
+    b.setAttribute("aria-pressed",String(skFilter===k));
+    b.onclick=()=>{skFilter=k; buildFilters(); buildSkills()};
+    box.appendChild(b);
+  });
+}
 function buildSkills(){
   const box=document.getElementById("skills"); box.innerHTML="";
   GROUPS.forEach(g=>{
+    const rows=SKILLS.filter(s=>s.group===g&&passesFilter(s));
+    if(!rows.length)return;
     const wrap=el("div","skgroup");
     wrap.appendChild(el("h3",null,GROUPLABEL[g]));
-    SKILLS.filter(s=>s.group===g).forEach(s=>{
+    rows.forEach(s=>{
       const stt=statusOf(s.name), free=isFree(s.name)||s.train==null;
       const d=el("div","sk st-"+stt);
-      d.appendChild(el("div","nm",s.name));
+      const nmWrap=el("div");
+      const nm=el("span","nm tap",s.name);
+      nm.setAttribute("role","button");
+      nm.setAttribute("tabindex","0");
+      nm.setAttribute("aria-expanded",String(openDesc.has(s.name)));
+      const toggle=()=>{openDesc.has(s.name)?openDesc.delete(s.name):openDesc.add(s.name); buildSkills()};
+      nm.onclick=toggle;
+      nm.onkeydown=e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();toggle()}};
+      nmWrap.appendChild(nm);
+      d.appendChild(nmWrap);
       const usable=!(s.unusable&&stt==="untrained");
       d.appendChild(el("div","base",usable?String(baseSkill(s)):"—"));
       const ctl=el("div","ctl");
@@ -433,10 +535,12 @@ function buildSkills(){
       if(s.unusable&&stt==="untrained")bits.push("unusable until trained");
       meta.appendChild(document.createTextNode("  "+bits.join("  ·  ")));
       d.appendChild(meta);
+      if(openDesc.has(s.name))d.appendChild(el("div","desc",DESC[s.name]||""));
       wrap.appendChild(d);
     });
     box.appendChild(wrap);
   });
+  if(!box.children.length)box.appendChild(el("p","empty","No skills match this filter."));
 }
 
 function award(L){
@@ -520,6 +624,39 @@ function buildSheet(){
   document.getElementById("sheet").textContent=L.join("\n");
 }
 
+function buildPrintable(){
+  const box=document.getElementById("printable");
+  const val=n=>baseSkill(skill(n));
+  const esc=t=>String(t).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+  const rows=arr=>arr.length
+    ? "<table>"+arr.map(n=>"<tr><td>"+esc(n)+"</td><td class='n'>"+val(n)+"</td></tr>").join("")+"</table>"
+    : "<p class='blank'>None</p>";
+  const spec=SKILLS.filter(s=>statusOf(s.name)==="specialized").map(s=>s.name);
+  const tr=SKILLS.filter(s=>statusOf(s.name)==="trained").map(s=>s.name);
+  const steps=planSteps();
+  let h="";
+  h+="<h1>"+esc(st.name||"Unnamed")+"</h1>";
+  h+="<p class='sub'>"+esc(st.heritage)+" "+esc(classLabel().toLowerCase())+"</p>";
+  h+="<div class='cols'><div><h2>Attributes</h2><table>"
+    +AK.map((k,i)=>"<tr><td>"+k+"</td><td class='n'>"+st.attrs[i]+"</td></tr>").join("")
+    +"<tr><td>Health</td><td class='n'>"+Math.floor(st.attrs[1]/2)+"</td></tr>"
+    +"<tr><td>Stamina</td><td class='n'>"+st.attrs[1]+"</td></tr>"
+    +"<tr><td>Mana</td><td class='n'>"+st.attrs[5]+"</td></tr>"
+    +"</table></div>";
+  h+="<div><h2>Specialized</h2>"+rows(spec)+"</div></div>";
+  h+="<h2>Trained</h2>"+rows(tr);
+  if(steps.length){
+    h+="<h2>Planned after creation</h2><table>"
+      +steps.map((x,i)=>"<tr><td>"+(i+1)+". "+esc(x.name)+"</td><td class='n'>"
+        +(x.at===null?"&gt;126":x.at===0?"now":"L"+x.at)+"</td></tr>").join("")
+      +"</table>";
+  }
+  h+="<p class='note'>Unplaced: "+(ATTR_TOTAL-spentAttr())+" attribute points, "+st.credits+" skill credits. "
+    +"Skill values include the training bonus (+5 trained, +10 specialized). "
+    +"Costs, formulas and class templates from <i>Asheron's Call Official Strategies &amp; Secrets</i>, Sybex 1999.</p>";
+  box.innerHTML=h;
+}
+
 function render(){
   document.getElementById("acred").textContent=ATTR_TOTAL-spentAttr();
   document.getElementById("afill").style.width=(spentAttr()/ATTR_TOTAL*100)+"%";
@@ -532,7 +669,7 @@ function render(){
   if(st.cls==="Custom"){df.className="flag"; df.textContent="A custom character is known as an adventurer."}
   else if(drifted()){df.className="flag bad"; df.textContent="Skills no longer match the "+st.cls.toLowerCase()+" template — this character becomes an adventurer."}
   else{df.className="flag"; df.textContent=st.cls+" template intact ("+st.heritage+" variant)."}
-  buildAttrs(); buildSkills(); buildPlan(); buildSheet();
+  buildAttrs(); buildFilters(); buildSkills(); buildPlan(); buildSheet(); buildPrintable(); syncHash();
 }
 
 document.getElementById("plevel").oninput=e=>{st.level=parseInt(e.target.value,10); buildPlan(); buildSheet()};
@@ -547,7 +684,53 @@ document.getElementById("copy").onclick=async()=>{
   try{await navigator.clipboard.writeText(document.getElementById("sheet").textContent); flash("copy","Copied")}
   catch(e){flash("copy","Select and copy above")}
 };
+document.getElementById("print").onclick=()=>{try{window.print()}catch(e){flash("print","Use your browser's print option")}};
 document.getElementById("reset").onclick=()=>{st.name=""; st.plan=[]; st.level=126; applyClass("Custom"); render()};
+
+const HK=Object.keys(HERITAGE), CK=Object.keys(CLASSES);
+const STATUS_CH={untrained:"0",trained:"1",specialized:"2"};
+const CH_STATUS={"0":"untrained","1":"trained","2":"specialized"};
+
+function encodeState(){
+  const sk=SKILLS.map(s=>STATUS_CH[statusOf(s.name)]).join("");
+  const plan=st.plan.map(n=>SKILLS.findIndex(s=>s.name===n)).filter(i=>i>=0).join(".");
+  return ["1",HK.indexOf(st.heritage),CK.indexOf(st.cls),st.attrs.join("."),sk,plan,st.level,st.credits,encodeURIComponent(st.name)].join("~");
+}
+function decodeState(code){
+  try{
+    const p=String(code).split("~");
+    if(p[0]!=="1"||p.length<9)return false;
+    const her=HK[+p[1]], cls=CK[+p[2]];
+    if(!her||!cls)return false;
+    const attrs=p[3].split(".").map(Number);
+    if(attrs.length!==6||attrs.some(n=>!Number.isFinite(n)||n<BASE||n>CAP))return false;
+    if(attrs.reduce((a,b)=>a+b,0)>ATTR_TOTAL)return false;
+    if(p[4].length!==SKILLS.length||!/^[012]+$/.test(p[4]))return false;
+    const credits=Number(p[7]), level=Number(p[6]);
+    if(!Number.isFinite(credits)||credits<0||credits>SKILL_CREDITS)return false;
+    const next={heritage:her,cls:cls,name:decodeURIComponent(p[8]||""),attrs:attrs,skills:{},
+      credits:credits,plan:[],level:Math.min(126,Math.max(1,level||126))};
+    SKILLS.forEach((s,i)=>{const v=CH_STATUS[p[4][i]]; if(v!=="untrained")next.skills[s.name]=v});
+    if(p[5])p[5].split(".").forEach(i=>{const s=SKILLS[+i]; if(s&&!next.skills[s.name])next.plan.push(s.name)});
+    st=next;
+    return true;
+  }catch(e){return false}
+}
+function shareURL(){
+  const l=location;
+  return l.origin+l.pathname+l.search+"#"+encodeState();
+}
+function syncHash(){
+  try{history.replaceState(null,"","#"+encodeState())}catch(e){}
+}
+document.getElementById("link").onclick=async()=>{
+  const u=shareURL();
+  try{await navigator.clipboard.writeText(u); flash("link","Link copied")}
+  catch(e){
+    try{history.replaceState(null,"","#"+encodeState()); flash("link","Copy from address bar")}
+    catch(e2){flash("link","Copy failed")}
+  }
+};
 
 const KEY="ac-builds";
 const store=(()=>{
@@ -602,5 +785,16 @@ document.getElementById("save").onclick=async()=>{
   loadSaves();
 };
 
-buildPickers(); applyClass("Custom"); render(); loadSaves();
+buildPickers();
+applyClass("Custom");
+try{
+  const h=(location.hash||"").replace(/^#/,"");
+  if(h)decodeState(h);
+}catch(e){}
+render();
+loadSaves();
+window.addEventListener("hashchange",()=>{
+  const h=(location.hash||"").replace(/^#/,"");
+  if(h&&h!==encodeState()&&decodeState(h))render();
+});
 </script>
